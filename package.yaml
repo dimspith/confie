@@ -1,19 +1,17 @@
 name:                confie
 version:             0.1.0.0
-github:              "githubuser/confie"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2020 Author name here"
-description:         Please see the README on GitHub at <https://github.com/githubuser/confie#readme>
+author:              "Dimitis Spythouris"
+copyright:           "2020 Dimitris Spythouris"
+description:         Please see the README on GitLab
 
 extra-source-files:
 - README.md
 
 dependencies:
 - base >= 4.7 && < 5
-- text >= 1.2.4.0
-- toml-parser
+- text >= 1.2.3.1
+- conf >= 0.1.1.0
 
 executables:
   confie:
@@ -21,5 +19,8 @@ executables:
     source-dirs:         src
     ghc-options:
     - -threaded
+    - -O2
     - -rtsopts
+    - -static
     - -with-rtsopts=-N
+    

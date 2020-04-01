@@ -1,3 +1,5 @@
 #+TITLE: PROJECT TODO LIST
 
-* TODO Parse toml files correctly with a customized syntax
+* TODO Parse configuration files correctly
+* TODO Install packages from a parsed toml file
+* TODO Clone supplied repos on set locations and execute commands

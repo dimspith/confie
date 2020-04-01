@@ -17,7 +17,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-15.5
+resolver: lts-14.27
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -34,16 +34,13 @@ packages:
 # These entries can reference officially published versions as well as
 # forks / in-progress versions pinned to a git hash. For example:
 #
-extra-deps:
-    - toml-parser-0.1.0.0@sha256:8d53d7b28024d99d27d0314a2a93b71fb0300daf7daf3fa23336062527a76b0b,1585
+# extra-deps:
 #     - toml-parser-0.1.0.0
 # - acme-missiles-0.3
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
-#
-# extra-deps: []
-
-# Override default flag values for local packages and extra-deps
+# extra-deps:
+# Override default flagp values for local packages and extra-deps
 # flags: {}
 
 # Extra package databases containing global packages

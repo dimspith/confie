@@ -1,11 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
 module FileParser ( parseFile
                   )where
 
-import TOML
 import qualified Data.Text as T
+import qualified Data.Text.IO as TIO
+import Data.Either
+import System.Exit
 
-
-parseFile :: IO T.Text -> IO ()
-parseFile contents = do
-  values <- parseTOML <$> contents
-  print values
+parseFile :: T.Text -> IO ()
+parseFile contents = TIO.putStrLn contents
