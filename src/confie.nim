@@ -1,12 +1,11 @@
 import args
 import os
 
+const cmdArgsError*: string = "Error: Could not get command line arguments!"
+
 when isMainModule:
-  if paramCount() == 0:
-    quit(helpMessage)
-  else:
     when declared(commandLineParams):
-      let args = commandLineParams()
-      parseArgs(args)
+      let arglist = commandLineParams()
+      parseArgs(arglist)
     else:
-      quit()
+      quit(cmdArgsError)
