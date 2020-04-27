@@ -3,7 +3,13 @@
 
 import os, strutils
 
-let helpMessage: string = "Usage: confie <file> [-h|-v]"
+let helpMessage: string = """
+confie - Configuration manager Version 0
+(c) 2020 LangHops
+Usage:
+  confie file [options]
+Options:
+  -h                     show this help message """
 ## The default help message
 
 proc parseFileOrDir(location: TaintedString): string =
