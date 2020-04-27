@@ -1,8 +1,8 @@
 build:
-	nimble build
+	@nimble build
 
 clean:
-	rm confie
+	@rm confie
 
 docs: clean-docs
 	@cd docs
