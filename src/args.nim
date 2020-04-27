@@ -8,6 +8,8 @@ let helpMessage*: string = "Usage: confie <file> [-h|-v]"
 
 proc parseArgs*(argList: seq[TaintedString]) =
   ## Takes a list of arguments and parses them
-  
-  echo argList.join(" ")
+  if argList.contains("-h"):
+    echo helpMessage
+  else:
+    echo argList.join(" ")
 
