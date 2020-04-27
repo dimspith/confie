@@ -1,0 +1,7 @@
+[dotfiles]
+default_fetch="copy"
+
+    [dotfiles.nvim]
+    local_path="nvim"
+    install_path="~/.config/nvim"
+
