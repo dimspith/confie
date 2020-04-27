@@ -31,9 +31,11 @@ proc parseArgs*(argList: seq[TaintedString]) =
   ## executing the appropriate commands
 
   if paramCount() == 0:
-    quit(helpMessage)
+    echo helpMessage
+    quit(QuitSuccess)
   elif argList.contains("-h"):
-    quit(helpMessage)
+    echo helpMessage
+    quit(QuitSuccess)
   elif paramCount() == 1:
      echo parseFileOrDir paramStr(1)
   else:
