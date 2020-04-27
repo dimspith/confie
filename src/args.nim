@@ -18,14 +18,13 @@ proc parseFileOrDir(location: TaintedString): string =
 
   if existsFile location:
     let fileContents: string = readFile location
-    stdout.write fileContents
-
+    return fileContents
   elif existsDir location:
     for kind, path in walkDir location:
-      echo path
-
+      result = result & path & "\n"
+    return
   else:
-    echo "Invalid file or directory!"
+    return "Invalid file or directory!"
 
 proc parseArgs*(argList: seq[TaintedString]) =
   ## Takes a list of arguments and parses them,
@@ -36,7 +35,7 @@ proc parseArgs*(argList: seq[TaintedString]) =
   elif argList.contains("-h"):
     quit(helpMessage)
   elif paramCount() == 1:
-     stdout.write parseFileOrDir paramStr(1)
+     echo parseFileOrDir paramStr(1)
   else:
     echo argList.join(" ")
 
