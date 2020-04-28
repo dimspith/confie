@@ -2,6 +2,7 @@
 ## command line arguments
 
 import os, strutils
+import parser
 
 let helpMessage: string = """
 confie - Configuration manager Version 0
@@ -17,8 +18,7 @@ proc parseFileOrDir(location: TaintedString): string =
   ## and execute the appropriate commands
 
   if existsFile location:
-    let fileContents: string = readFile location
-    return fileContents
+    return parseTOMLFile(location)
   elif existsDir location:
     for kind, path in walkDir location:
       result = result & path & "\n"
@@ -40,4 +40,3 @@ proc parseArgs*(argList: seq[TaintedString]) =
      echo parseFileOrDir paramStr(1)
   else:
     echo argList.join(" ")
-
