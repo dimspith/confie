@@ -1,5 +1,3 @@
-import strformat
-
 type
   Packages = object
     package_manager: string
@@ -15,13 +13,3 @@ type
   Config* = object
     packageConfig: Packages
     dotfiles: seq[Dotfile]
-
-proc configString*(cfg: Config): string =
-  return &"""
-Packages:
-  Package Manager: {cfg.package_manager}
-  Package List: {cfg.package_list}
-
-Dotfiles:
-  
-"""
