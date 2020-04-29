@@ -12,4 +12,3 @@ bin           = @["confie"]
 # Dependencies
 
 requires "nim >= 1.2.0"
-requires "parsetoml >= 0.5.0"
