@@ -4,7 +4,9 @@ type
     local_path: string
     install_path: string
 
+type
   Conf* = object
-    package_list: seq[string]
     dotfiles: seq[Dotfile]
+    packages: seq[string]
+      
 
