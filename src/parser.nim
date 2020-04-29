@@ -1,3 +1,3 @@
-proc parseTOMLFile*(location: TaintedString): string =
+proc parseTOMLFile*(location: string): string =
   ## Parse the toml config file and fill the required variables
   location
