@@ -1,0 +1,1 @@
+parseArgs	args.html#parseArgs,seq[TaintedString]	args: parseArgs(argList: seq[TaintedString])	
