@@ -1,6 +1,6 @@
-import parsecfg, types, tables, sugar
+import parsecfg, types, tables, sugar, install, sequtils
 
-proc parseConfig*(location: string): string =
+proc parseConfig*(location: string) =
   ## Parse the toml config file and fill the required variables
   try:
     let cfg = loadConfig(location)
@@ -9,15 +9,22 @@ proc parseConfig*(location: string): string =
       packages: @[]
     )
     for section, key in cfg.pairs:
+      if section=="":
+        conf.newPackages(key.getOrDefault("packages"))
+        #echo(conf.packages)
+        continue
       let dotfile = Dotfile(
         name: section,
         local_path: key.getOrDefault("local_path"),
         install_path: key.getOrDefault("install_path")
       )
       conf.dotfiles.add(dotfile)
+      #echo(conf.dotfiles)
+    discard conf.packages.map(pack => installPackage(pack))
   except IOError:
-    return "Invalid filename"
+    echo "File not found"
 
+#For testing purposes will remove later
 when isMainModule:
-  echo parseConfig("confie.cfg")
-  echo parseConfig("qq.cfg")
+  parseConfig("confie.cfg")
+  parseConfig("qq.cfg")

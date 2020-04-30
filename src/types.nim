@@ -1,5 +1,4 @@
-import sugar
-import sequtils
+import sugar, sequtils, strutils
 
 type
   Dotfile* = object
@@ -29,3 +28,6 @@ proc getField*(config: Conf, name: string, field: string): string =
       return config.dotfiles.filter(x => x.name == name)[0].local_path
     of "install_path":
       return config.dotfiles.filter(x => x.name == name)[0].install_path
+
+proc newPackages*(config: Conf, packages: string) =
+  config.packages = packages.unindent.splitLines.toSeq
