@@ -18,7 +18,7 @@ proc parseFileOrDir(location: TaintedString): string =
   ## and execute the appropriate commands
 
   if existsFile location:
-    return parseTOMLFile(location)
+    return parseConfig(location)
   elif existsDir location:
     for kind, path in walkDir location:
       result = result & path & "\n"
