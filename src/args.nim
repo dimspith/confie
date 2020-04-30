@@ -13,20 +13,21 @@ Options:
   -h                     show this help message """
 ## The default help message
 
-proc parseFileOrDir(location: TaintedString): string =
+proc parseFileOrDir(location: string): string =
   ## Parse the contents of a file or a list of files in a directory
   ## and execute the appropriate commands
 
   if existsFile location:
     return parseConfig(location)
   elif existsDir location:
-    for kind, path in walkDir location:
-      result = result & path & "\n"
-    return
+    if existsFile (location & "/confie.cfg"):
+      return parseConfig (location & "/confie.cfg")
+    else:
+      return "Directory does not contain a confie.cfg file!"
   else:
     return "Invalid file or directory!"
 
-proc parseArgs*(argList: seq[TaintedString]) =
+proc parseArgs*(argList: seq[TaintedString]): string =
   ## Takes a list of arguments and parses them,
   ## executing the appropriate commands
 
@@ -36,7 +37,11 @@ proc parseArgs*(argList: seq[TaintedString]) =
   elif argList.contains("-h"):
     echo helpMessage
     quit(QuitSuccess)
-  elif paramCount() == 1:
-     echo parseFileOrDir paramStr(1)
+  elif argList.contains("install"):
+    let fileIndex: int = argList.find("install") + 1
+    if argList.len < (fileIndex + 1):
+      return parseFileOrDir(getCurrentDir())
+    else:
+      return parseFileOrDir argList[fileIndex]
   else:
     echo argList.join(" ")

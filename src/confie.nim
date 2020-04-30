@@ -6,7 +6,7 @@ const cmdArgsError*: string = "Error: Could not get command line arguments!"
 proc main() =
   when declared(commandLineParams):
     let arglist = commandLineParams()
-    parseArgs(arglist)
+    stdout.write parseArgs(arglist)
   else:
     quit(cmdArgsError)
 

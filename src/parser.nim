@@ -1,6 +1,6 @@
 import parsecfg, types, tables, sugar, install, sequtils
 
-proc parseConfig*(location: string) =
+proc parseConfig*(location: string): string =
   ## Parse the toml config file and fill the required variables
   try:
     let cfg = loadConfig(location)
