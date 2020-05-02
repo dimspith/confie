@@ -7,7 +7,7 @@ type
     install_path*: string
 
 type
-  Conf* = ref object
+  Conf* = object
     dotfiles*: seq[Dotfile]
     packages*: seq[string]
 
@@ -29,5 +29,5 @@ proc getField*(config: Conf, name: string, field: string): string =
     of "install_path":
       return config.dotfiles.filter(x => x.name == name)[0].install_path
 
-proc newPackages*(config: Conf, packages: string) =
-  config.packages = packages.unindent.splitLines.toSeq
+proc newPackages*(packages: string): seq[string] =
+  return packages.unindent.splitLines.toSeq

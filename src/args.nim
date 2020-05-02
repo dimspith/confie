@@ -3,6 +3,7 @@
 
 import os, strutils
 import parser
+import types
 
 let helpMessage: string = """
 confie - Configuration manager Version 0
@@ -10,7 +11,8 @@ confie - Configuration manager Version 0
 Usage:
   confie file [options]
 Options:
-  -h                     show this help message """
+  -h                     show this help message
+  -i, install            installs the list of packages"""
 ## The default help message
 
 proc parseFileOrDir(location: string): string =
@@ -18,10 +20,10 @@ proc parseFileOrDir(location: string): string =
   ## and execute the appropriate commands
 
   if existsFile location:
-    return parseConfig(location)
+    let config = parseConfig(location)
   elif existsDir location:
-    if existsFile (location & "/confie.cfg"):
-      return parseConfig (location & "/confie.cfg")
+    if existsFile (location / "confie.cfg"):
+      let config = parseConfig (location / "confie.cfg")
     else:
       return "Directory does not contain a confie.cfg file!"
   else:
