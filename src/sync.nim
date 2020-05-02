@@ -24,8 +24,12 @@ proc overwriteDot(source, dest: string, ftype: int) =
       return
 
 proc addTail(source, dest: string): string =
-  let fileSplit = splitPath(source)
-  return dest/fileSplit.tail
+  let sourcePath = splitPath(source)
+  let destPath = splitPath(dest)
+  if destPath.tail == sourcePath.tail:
+    return dest
+  else:
+    return dest/sourcePath.tail
 
 proc copyDots*(source, dest: string) =
   let source = getPath(source)
@@ -46,7 +50,7 @@ proc copyDots*(source, dest: string) =
     echo "Directory or file does not exist."
 
 when isMainModule:
-  copyDots("~/.zshrc", "~/Desktop/qq2")
+  copyDots("~/Desktop/qq", "~/Desktop/qq2/qq")
   echo(absolutePath("."))
   echo(absolutePath("../../snake.cast"))
   echo(expandTilde("~/Desktop/qq/.zshrc"))
