@@ -7,6 +7,8 @@ proc getNeeded(package: string): string =
     return package
 
 proc installPackages*(config: Conf): string =
+  ## Install all packages defined in the configuration with the
+  ## system's package manager
   let (installCmd, root) =
     foreignDepInstallCmd(getPackagesString(config))
   let cmd = getNeeded(installCmd)
@@ -18,4 +20,5 @@ proc installPackages*(config: Conf): string =
       return cmd & " command failed"
 
 proc installDotfiles*(config: Conf): string =
+  ## Install all dotfiles defined in the configuration
   echo "Not supported yet!"

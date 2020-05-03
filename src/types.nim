@@ -18,7 +18,7 @@ let sampleConfig*: Conf = Conf(dotfiles:
   ], packages: @["emacs", "nvim"])
 
 func getAllDotfileNames*(config: Conf): seq[string] =
-  ## Returns a list of all dotfiles defined in the configuration
+  ## Returns a list of all dotfile names defined in the configuration
   return config.dotfiles.map(x => x.name)
 
 func stringsToSeq*(packages: string): seq[string] =
@@ -26,14 +26,15 @@ func stringsToSeq*(packages: string): seq[string] =
   return packages.unindent.splitLines.toSeq
 
 func appendDotfile*(conf: Conf, dot: Dotfile): Conf =
-  ## Returns a new instance of the config with a dotfile added
+  ## Returns a new instance of the configuration with a dotfile added
   result = conf
   result.dotfiles.add(dot)
 
 func setPackages*(conf: Conf, packages: string): Conf =
-  ## Returns a new instance of the config with the package list filled
+  ## Returns a new instance of the configuration with the package list filled
   result = conf
   result.packages = stringsToSeq packages
 
 func getPackagesString*(conf: Conf): string =
+  ## Fetches the package list from the configuration as one string
   conf.packages.foldl(a & " " & b)
