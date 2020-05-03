@@ -17,17 +17,23 @@ let sampleConfig*: Conf = Conf(dotfiles:
     Dotfile(name: "emacs", local_path: "emacs/", install_path: "~/.emacs.d/")
   ], packages: @["emacs", "nvim"])
 
-proc getAllDotfileNames*(config: Conf): seq[string] =
+func getAllDotfileNames*(config: Conf): seq[string] =
+  ## Returns a list of all dotfiles defined in the configuration
   return config.dotfiles.map(x => x.name)
 
-proc getField*(config: Conf, name: string, field: string): string =
-  case field:
-    of "name":
-      return config.dotfiles.filter(x => x.name == name)[0].name
-    of "local_path":
-      return config.dotfiles.filter(x => x.name == name)[0].local_path
-    of "install_path":
-      return config.dotfiles.filter(x => x.name == name)[0].install_path
-
-proc newPackages*(packages: string): seq[string] =
+func stringsToSeq*(packages: string): seq[string] =
+  ## Converts a multiline string into a sequence
   return packages.unindent.splitLines.toSeq
+
+func appendDotfile*(conf: Conf, dot: Dotfile): Conf =
+  ## Returns a new instance of the config with a dotfile added
+  result = conf
+  result.dotfiles.add(dot)
+
+func setPackages*(conf: Conf, packages: string): Conf =
+  ## Returns a new instance of the config with the package list filled
+  result = conf
+  result.packages = stringsToSeq packages
+
+func getPackagesString*(conf: Conf): string =
+  conf.packages.foldl(a & " " & b)

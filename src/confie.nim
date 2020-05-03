@@ -2,11 +2,12 @@ import args
 import os
 
 const cmdArgsError*: string = "Error: Could not get command line arguments!"
+## Error thrown when confie can't fetch the command line arguments
 
 proc main() =
   when declared(commandLineParams):
     let arglist = commandLineParams()
-    stdout.write parseArgs(arglist)
+    discard parseArgs(arglist)
   else:
     quit(cmdArgsError)
 

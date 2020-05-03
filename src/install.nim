@@ -1,4 +1,4 @@
-import osproc, distros
+import osproc, distros, types
 
 proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
@@ -6,15 +6,16 @@ proc getNeeded(package: string): string =
   else:
     return package
 
-proc installPackage*(package: string) =
-  let (installCmd, root) = foreignDepInstallCmd(package)
+proc installPackages*(config: Conf): string =
+  let (installCmd, root) =
+    foreignDepInstallCmd(getPackagesString(config))
   let cmd = getNeeded(installCmd)
   if root == true:
     if (execCmd("sudo " & cmd) == 1):
-      echo("sudo ", cmd, " command failed with exit code: ", 1)
+      return "sudo " & cmd & " command failed"
   else:
     if (execCmd(cmd) == 1):
-      echo(cmd, " command failed with exit code: ", 1)
-#For testing purposes will remove later
-when isMainModule:
-  installPackage("emacs neovim alacritty")
+      return cmd & " command failed"
+
+proc installDotfiles*(config: Conf): string =
+  echo "Not supported yet!"

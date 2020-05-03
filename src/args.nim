@@ -4,6 +4,8 @@
 import os, strutils
 import parser
 import types
+import install
+import sync
 
 let helpMessage: string = """
 confie - Configuration manager Version 0
@@ -13,37 +15,34 @@ Usage:
 Options:
   -h                     show this help message
   -i, install            installs the list of packages"""
-## The default help message
-
-proc parseFileOrDir(location: string): string =
-  ## Parse the contents of a file or a list of files in a directory
-  ## and execute the appropriate commands
-
-  if existsFile location:
-    let config = parseConfig(location)
-  elif existsDir location:
-    if existsFile (location / "confie.cfg"):
-      let config = parseConfig (location / "confie.cfg")
-    else:
-      return "Directory does not contain a confie.cfg file!"
-  else:
-    return "Invalid file or directory!"
+    ## The default help message
 
 proc parseArgs*(argList: seq[TaintedString]): string =
-  ## Takes a list of arguments and parses them,
-  ## executing the appropriate commands
+  ## Takes a list of arguments and parses them, executing
+  ## the appropriate commands.
+  ## Returns a string representing the error or success message
 
   if paramCount() == 0:
-    echo helpMessage
-    quit(QuitSuccess)
+    quit(helpMessage, QuitSuccess)
   elif argList.contains("-h"):
-    echo helpMessage
-    quit(QuitSuccess)
+    quit(helpMessage, QuitSuccess)
   elif argList.contains("install"):
-    let fileIndex: int = argList.find("install") + 1
-    if argList.len < (fileIndex + 1):
-      return parseFileOrDir(getCurrentDir())
+    let nextLoc: int = (argList.find("install") + 1)
+    if argList.len == nextLoc or argList[nextLoc].startsWith("-"):
+      let parsedConfig = parseFileOrDir(getCurrentDir())
+      if parsedConfig[0].isEmptyOrWhitespace:
+        discard installPackages(parsedConfig[1])
+        discard installDotfiles(parsedConfig[1])
+      else:
+        quit(parsedConfig[0], QuitFailure)      
     else:
-      return parseFileOrDir argList[fileIndex]
-  else:
-    echo argList.join(" ")
+      let parsedConfig = parseFileOrDir(getCurrentDir())
+      if parsedConfig[0].isEmptyOrWhitespace:
+        case argList[nextLoc]:
+          of "dotfiles":
+            discard installDotfiles(parsedConfig[1])
+          of "packages":
+            discard installPackages(parsedConfig[1])
+          else:
+            quit("Error: Unsupported installation candidate", QuitFailure)
+        quit(parsedConfig[0], QuitFailure)      
