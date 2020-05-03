@@ -8,6 +8,8 @@ files and transferring them with ease across different installations. The projec
 in it's really early stages with no useful functionality at the moment
 but this will change soon!
 
+All work that's being done is located in the `develop` branch.
+
 ## Installation
 To build from source, just run `nimble build`. An executable will appear in the project folder.
 
