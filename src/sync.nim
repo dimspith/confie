@@ -23,7 +23,7 @@ proc overwriteDot(source, dest: string, ftype: int) =
       echo("Skipping ", source)
       return
 
-proc addTail(source, dest: string): string =
+func addTail(source, dest: string): string =
   let sourcePath = splitPath(source)
   let destPath = splitPath(dest)
   if destPath.tail == sourcePath.tail:
