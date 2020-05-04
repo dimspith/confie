@@ -8,13 +8,19 @@ import types
 
 
 let helpMessage: string = """
-confie - Configuration manager Version 0
+confie - Configuration manager Version 0.1.0
 (c) 2020 LangHops
 Usage:
-  confie file [options]
+  confie <command> [target] [options]
+Commands:
+  install            install packages or dotfiles
+  print-config       print configuration info
+Targets (for install):
+  packages           install the list of packages
+  dotfiles           install defined dotfiles
 Options:
   -h                     show this help message
-  -i, install            installs the list of packages"""
+"""
     ## The default help message
 
 proc parseArgs*(argList: seq[TaintedString]): string =
