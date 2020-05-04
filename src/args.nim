@@ -3,9 +3,8 @@
 
 import os, strutils
 import parser
-import types
 import install
-import sync
+
 
 let helpMessage: string = """
 confie - Configuration manager Version 0
