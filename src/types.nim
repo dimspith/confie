@@ -1,4 +1,4 @@
-import sugar, sequtils, strutils
+import sugar, sequtils, strutils, strformat
 
 type
   Dotfile* = object
@@ -32,3 +32,12 @@ func setPackages*(conf: Conf, packages: string): Conf =
 func getPackagesString*(conf: Conf): string =
   ## Fetches the package list from the configuration as one string
   conf.packages.foldl(a & " " & b)
+
+proc printConfig*(conf: Conf): string =
+  return &"""
+Package list:
+{getPackagesString conf}
+
+Dotfiles:
+{getAllDotfileNames(conf).foldl(a & " " & b)}
+"""

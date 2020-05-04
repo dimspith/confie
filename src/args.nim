@@ -4,6 +4,7 @@
 import os, strutils
 import parser
 import install
+import types
 
 
 let helpMessage: string = """
@@ -44,3 +45,11 @@ proc parseArgs*(argList: seq[TaintedString]): string =
             discard installPackages(parsedConfig[1])
           else:
             quit("Error: Unsupported installation candidate", QuitFailure)
+      else:
+        quit(parsedConfig[0], QuitFailure)
+  elif argList.contains("print-config"):
+    let parsedConfig = parseFileOrDir(getCurrentDir())
+    if parsedConfig[0].isEmptyOrWhitespace:    
+      echo printConfig(parsedConfig[1])
+    else:
+      quit(parsedConfig[0], QuitFailure)
