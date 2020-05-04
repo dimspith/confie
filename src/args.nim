@@ -34,7 +34,7 @@ proc parseArgs*(argList: seq[TaintedString]): string =
         discard installPackages(parsedConfig[1])
         discard installDotfiles(parsedConfig[1])
       else:
-        quit(parsedConfig[0], QuitFailure)      
+        quit(parsedConfig[0], QuitFailure)
     else:
       let parsedConfig = parseFileOrDir(getCurrentDir())
       if parsedConfig[0].isEmptyOrWhitespace:
@@ -45,4 +45,3 @@ proc parseArgs*(argList: seq[TaintedString]): string =
             discard installPackages(parsedConfig[1])
           else:
             quit("Error: Unsupported installation candidate", QuitFailure)
-        quit(parsedConfig[0], QuitFailure)      

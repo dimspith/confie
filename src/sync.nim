@@ -31,7 +31,7 @@ proc addTail(source, dest: string): string =
   else:
     return dest/sourcePath.tail
 
-proc copyDots*(source, dest: string) =
+proc copyDots*(source, dest: string): string =
   let source = getPath(source)
   var dest = getPath(dest)
   dest = addTail(source, dest)
@@ -48,10 +48,4 @@ proc copyDots*(source, dest: string) =
     overwriteDot(source, dest, 1)
   else:
     echo "Directory or file does not exist."
-
-when isMainModule:
-  copyDots("~/Desktop/qq", "~/Desktop/qq2/qq")
-  echo(absolutePath("."))
-  echo(absolutePath("../../snake.cast"))
-  echo(expandTilde("~/Desktop/qq/.zshrc"))
-  #copyDots("~/Desktop/random/rustlings", ".")
+  return "Done"

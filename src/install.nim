@@ -1,4 +1,4 @@
-import osproc, distros, types
+import osproc, distros, types, sync, sugar, sequtils
 
 proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
@@ -21,4 +21,5 @@ proc installPackages*(config: Conf): string =
 
 proc installDotfiles*(config: Conf): string =
   ## Install all dotfiles defined in the configuration
-  echo "Not supported yet!"
+  discard config.dotfiles.map(dot => copyDots(dot.local_path, dot.install_path))
+  return "Dotfiles copied"
