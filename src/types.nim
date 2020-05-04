@@ -11,12 +11,6 @@ type
     dotfiles*: seq[Dotfile]
     packages*: seq[string]
 
-let sampleConfig*: Conf = Conf(dotfiles:
-  @[
-    Dotfile(name: "nvim", local_path: "nvim/", install_path: "~/.config/nvim"),
-    Dotfile(name: "emacs", local_path: "emacs/", install_path: "~/.emacs.d/")
-  ], packages: @["emacs", "nvim"])
-
 func getAllDotfileNames*(config: Conf): seq[string] =
   ## Returns a list of all dotfile names defined in the configuration
   return config.dotfiles.map(x => x.name)
