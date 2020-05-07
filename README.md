@@ -7,6 +7,8 @@
 
 #### The fast and portable configuration manager for GNU/Linux systems.
 
+##### WARNING: Still highly experimental so use with caution!
+
 Confie is a portable and extensible configuration manager for the everyday user 
 to simplify the process of maintaining a system's configuration files and packages
 while transferring them with ease across different installations.
@@ -76,6 +78,8 @@ install_path = "~/.emacs.d"
 ```
 
 The `packages` key contains the list of packages to be installed using the system's package manager.
+
+NOTE: packages should always be surrounded with three double quotes as seen above
 
 Sections such as `[nvim]` are named after the package they represent and contain 2 keys:
 * `local_path` which is the path to the directory containing the configuration
