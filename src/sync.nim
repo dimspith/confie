@@ -8,7 +8,7 @@ proc getPath(path: string): string =
 
 proc overwriteDot(source, dest, oldSource, oldDest: string, ftype: int) =
   while true:
-    echo("Do you want to overwrite already existing file/directory?(y/n)")
+    echo(oldDest, " already exists. Do you want to overwrite it?(y/n)")
     let answer = stdin.readLine()
     if answer == "y" or answer == "yes" or answer == "Y":
       echo("Copying ", oldSource, " to ", oldDest)
@@ -45,6 +45,9 @@ proc copyDots*(source, dest: string): string =
     echo("Copying ", oldSource, " to ", oldDest)
     copyDir(source, dest)
   elif fileExists(source) and not fileExists(dest):
+    let destDir = splitPath(dest)
+    if not dirExists(destDir.head):
+      createDir(destDir.head)
     echo("Copying ", oldSource, " to ", oldDest)
     copyFile(source, dest)
   elif fileExists(source) and fileExists(dest):
