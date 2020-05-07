@@ -1,5 +1,10 @@
-# Confie
-### :gear: The portable configuration manager
+<p align="center">
+  <img
+    width="500"
+    src="https://gitlab.com/langhops/confie/-/raw/develop/confie.png"
+    alt="Starship – Cross-shell prompt"
+  />
+</p>
 
 ## What is confie?
 Confie aims to be a portable and extensible configuration manager for the everyday user 
