@@ -1,3 +1,5 @@
-/confie
+confie
 *.html
 *.css
+docs/*
+testing

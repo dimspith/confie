@@ -1,5 +1,15 @@
-# This is just an example to get you started. A typical binary package
-# uses this file as the main entry point of the application.
+import args
+import os
+
+const cmdArgsError*: string = "Error: Could not get command line arguments!"
+## Error thrown when confie can't fetch the command line arguments
+
+proc main() =
+  when declared(commandLineParams):
+    let arglist = commandLineParams()
+    discard parseArgs(arglist)
+  else:
+    quit(cmdArgsError)
 
 when isMainModule:
-  echo("Hello, World!")
+  main()
