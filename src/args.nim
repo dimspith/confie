@@ -14,13 +14,13 @@ Usage:
   confie <command> [target] [options]
 Commands:
   install            install packages or dotfiles
+  fetch              fetches dotfiles
   print-config       print configuration info
 Targets (for install):
   packages           install the list of packages
   dotfiles           install defined dotfiles
 Options:
-  -h                     show this help message
-"""
+  -h                     show this help message"""
     ## The default help message
 
 proc parseArgs*(argList: seq[TaintedString]): string =
@@ -32,30 +32,28 @@ proc parseArgs*(argList: seq[TaintedString]): string =
     quit(helpMessage, QuitSuccess)
   elif argList.contains("-h"):
     quit(helpMessage, QuitSuccess)
-  elif argList.contains("install"):
-    let nextLoc: int = (argList.find("install") + 1)
-    if argList.len == nextLoc or argList[nextLoc].startsWith("-"):
-      let parsedConfig = parseFileOrDir(getCurrentDir())
-      if parsedConfig[0].isEmptyOrWhitespace:
-        discard installPackages(parsedConfig[1])
-        discard installDotfiles(parsedConfig[1])
-      else:
-        quit(parsedConfig[0], QuitFailure)
-    else:
-      let parsedConfig = parseFileOrDir(getCurrentDir())
-      if parsedConfig[0].isEmptyOrWhitespace:
-        case argList[nextLoc]:
-          of "dotfiles":
-            discard installDotfiles(parsedConfig[1])
-          of "packages":
-            discard installPackages(parsedConfig[1])
-          else:
-            quit("Error: Unsupported installation candidate", QuitFailure)
-      else:
-        quit(parsedConfig[0], QuitFailure)
-  elif argList.contains("print-config"):
+  else:
     let parsedConfig = parseFileOrDir(getCurrentDir())
-    if parsedConfig[0].isEmptyOrWhitespace:    
-      echo printConfig(parsedConfig[1])
+    if parsedConfig[0].isEmptyOrWhitespace:
+      if argList.contains("install"):
+        let nextLoc: int = (argList.find("install") + 1)
+        if argList.len == nextLoc or argList[nextLoc].startsWith("-"):
+            echo installPackages(parsedConfig[1])
+            echo installDotfiles(parsedConfig[1])
+        else:
+          if parsedConfig[0].isEmptyOrWhitespace:
+            case argList[nextLoc]:
+              of "dotfiles":
+                echo installDotfiles(parsedConfig[1])
+              of "packages":
+                echo installPackages(parsedConfig[1])
+              else:
+                quit("Error: Unsupported installation candidate", QuitFailure)
+      elif argList.contains("fetch"):
+        echo fetchDotfiles(parsedConfig[1])
+      elif argList.contains("print-config"):
+        echo printConfig(parsedConfig[1])
+      else:
+        quit("Command not found", QuitFailure)
     else:
       quit(parsedConfig[0], QuitFailure)

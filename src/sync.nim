@@ -32,17 +32,18 @@ func addTail(source, dest: string): string =
     return dest/sourcePath.tail
 
 proc copyDots*(source, dest: string): string =
+  if source.isEmptyOrWhitespace or dest.isEmptyOrWhitespace:
+    return "Skip"
   let source = getPath(source)
   var dest = getPath(dest)
   dest = addTail(source, dest)
-  echo("Source: ", source, " Dest: ", dest)
   if dirExists(source) and dirExists(dest):
     overwriteDot(source, dest, 0)
   elif dirExists(source) and not dirExists(dest):
-    echo("Copying dir ", source, " to ", dest)
+    echo("Copying ", source, " to ", dest)
     copyDir(source, dest)
   elif fileExists(source) and not fileExists(dest):
-    echo("Copying file ", source, " to ", dest)
+    echo("Copying ", source, " to ", dest)
     copyFile(source, dest)
   elif fileExists(source) and fileExists(dest):
     overwriteDot(source, dest, 1)
