@@ -1,4 +1,4 @@
-import osproc, distros, types, sync, sugar, sequtils
+import osproc, distros, types, sync, sugar, sequtils, strutils
 
 proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
@@ -9,6 +9,8 @@ proc getNeeded(package: string): string =
 proc installPackages*(config: Conf): string =
   ## Install all packages defined in the configuration with the
   ## system's package manager
+  if (getPackagesString(config).isEmptyOrWhitespace()):
+    return "Packages section is empty or not declared correctly"
   let (installCmd, root) =
     foreignDepInstallCmd(getPackagesString(config))
   let cmd = getNeeded(installCmd)
