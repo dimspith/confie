@@ -38,8 +38,12 @@ proc parseArgs*(argList: seq[TaintedString]): string =
       if argList.contains("install"):
         let nextLoc: int = (argList.find("install") + 1)
         if argList.len == nextLoc or argList[nextLoc].startsWith("-"):
-            echo installPackages(parsedConfig[1])
-            echo installDotfiles(parsedConfig[1])
+            let installation = installPackages(parsedConfig[1])
+            echo(installation)
+            if installation == "Installation failed":
+              quit("Abort", QuitFailure)
+            else:
+              echo installDotfiles(parsedConfig[1])
         else:
           if parsedConfig[0].isEmptyOrWhitespace:
             case argList[nextLoc]:

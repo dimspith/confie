@@ -1,4 +1,4 @@
-import os, strutils
+import os, strutils, terminal
 
 proc getPath(path: string): string =
   if path.startsWith("~"):
@@ -6,27 +6,36 @@ proc getPath(path: string): string =
   else:
     return absolutePath(path)
 
+proc setEchoColor*(echoStr: string, color: ForegroundColor) =
+  setForegroundColor(stdout, color)
+  stdout.write(echoStr)
+  setForegroundColor(stdout, fgDefault)
+
 proc overwriteDot(source, dest, oldSource, oldDest: string, ftype: int) =
   while true:
-    echo(oldDest, " already exists. Do you want to overwrite it?(y/n)")
+    setEchoColor("==> " & oldDest & " already exists. Do you want to overwrite it?(y/n)\n",
+      fgGreen)
+    setEchoColor("==> ", fgGreen)
     let answer = stdin.readLine()
     if answer == "y" or answer == "yes" or answer == "Y":
-      echo("Copying ", oldSource, " to ", oldDest)
+      setEchoColor("==> Copying " & oldSource & " to " & oldDest & "\n", fgBlue)
       if ftype == 0:
         copyDir(source, dest)
       elif ftype == 1:
         copyFile(source, dest)
       else:
-        echo("Not a file or directory.")
+        setEchoColor("Not a file or directory.\n", fgRed)
       return
     elif answer == "n" or answer == "no" or answer == "N":
-      echo("Skipping ", oldSource)
+      setEchoColor("Skipping " & oldSource & "\n", fgYellow)
       return
 
 func addTail(source, dest: string): string =
   let sourcePath = splitPath(source)
   let destPath = splitPath(dest)
-  if destPath.tail == sourcePath.tail:
+  if (destPath.tail == sourcePath.tail) and ((fileExists(destPath.tail) and
+      fileExists(sourcePath.tail)) or (dirExists(destPath.tail) and dirExists(
+      sourcePath.tail))):
     return dest
   else:
     return dest/sourcePath.tail
@@ -42,16 +51,16 @@ proc copyDots*(source, dest: string): string =
   if dirExists(source) and dirExists(dest):
     overwriteDot(source, dest, oldSource, oldDest, 0)
   elif dirExists(source) and not dirExists(dest):
-    echo("Copying ", oldSource, " to ", oldDest)
+    setEchoColor("==> Copying " & oldSource & " to " & oldDest & "\n", fgBlue)
     copyDir(source, dest)
   elif fileExists(source) and not fileExists(dest):
     let destDir = splitPath(dest)
     if not dirExists(destDir.head):
       createDir(destDir.head)
-    echo("Copying ", oldSource, " to ", oldDest)
+    setEchoColor("==> Copying " & oldSource & " to " & oldDest & "\n", fgBlue)
     copyFile(source, dest)
   elif fileExists(source) and fileExists(dest):
     overwriteDot(source, dest, oldSource, oldDest, 1)
   else:
-    echo "Directory or file does not exist."
+    setEchoColor("Directory or file does not exist.\n", fgRed)
   return "Done"

@@ -1,4 +1,4 @@
-import osproc, distros, types, sync, sugar, sequtils, strutils
+import osproc, distros, types, sync, sugar, sequtils, strutils, terminal
 
 proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
@@ -24,7 +24,8 @@ proc installPackages*(config: Conf): string =
 
 proc verify(): string =
   while true:
-    echo("Proceed with copy?(y/n)")
+    setEchoColor("==> Proceed with copy?(y/n)\n", fgGreen)
+    setEchoColor("==> ", fgGreen)
     let answer = stdin.readLine()
     if answer == "y" or answer == "yes" or answer == "Y":
       return "Continue"
