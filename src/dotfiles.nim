@@ -1,15 +1,6 @@
-import os, strutils, terminal
+## Functions to parse, edit and install dotfiles
 
-proc getPath(path: string): string =
-  if path.startsWith("~"):
-    return expandTilde(path)
-  else:
-    return absolutePath(path)
-
-proc setEchoColor*(echoStr: string, color: ForegroundColor) =
-  setForegroundColor(stdout, color)
-  stdout.write(echoStr)
-  setForegroundColor(stdout, fgDefault)
+import util, os, types, sugar, sequtils, strutils, terminal
 
 proc overwriteDot(source, dest, oldSource, oldDest: string, ftype: int) =
   while true:
@@ -33,14 +24,14 @@ proc overwriteDot(source, dest, oldSource, oldDest: string, ftype: int) =
 func addTail(source, dest: string): string =
   let sourcePath = splitPath(source)
   let destPath = splitPath(dest)
-  if (destPath.tail == sourcePath.tail) and ((fileExists(destPath.tail) and
-      fileExists(sourcePath.tail)) or (dirExists(destPath.tail) and dirExists(
-      sourcePath.tail))):
+  if (destPath.tail == sourcePath.tail) and
+     ((fileExists(destPath.tail) and fileExists(sourcePath.tail)) or
+     (dirExists(destPath.tail) and dirExists(sourcePath.tail))):
     return dest
   else:
     return dest/sourcePath.tail
 
-proc copyDots*(source, dest: string): string =
+proc copyDots(source, dest: string): string =
   if source.isEmptyOrWhitespace or dest.isEmptyOrWhitespace:
     return "Skip"
   let oldSource = source
@@ -64,3 +55,19 @@ proc copyDots*(source, dest: string): string =
   else:
     setEchoColor("Directory or file does not exist.\n", fgRed)
   return "Done"
+
+proc installDotfiles*(config: Conf): string =
+  ## Install all dotfiles defined in the configuration
+  if verify() == "Abort":
+    return "Abort"
+  else:
+    discard config.dotfiles.map(dot => copyDots(dot.local_path, dot.install_path))
+    return "Dotfiles copied"
+
+proc fetchDotfiles*(config: Conf): string =
+  ## Fetches all dotfiles defined in the configuration
+  if verify() == "Abort":
+    return "Abort"
+  else:
+    discard config.dotfiles.map(dot => copyDots(dot.install_path, dot.local_path))
+    return "Dotfiles copied"

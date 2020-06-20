@@ -1,9 +1,8 @@
-## This module contains all functions responsible for parsing and validating
-## command line arguments
+## Contains all functions responsible for parsing and validating command line arguments
 
 import os, strutils
 import parser
-import install
+import packages, dotfiles
 import types
 
 

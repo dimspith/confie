@@ -1,3 +1,5 @@
+## List of type definitions
+
 import sugar, sequtils, strutils, strformat
 
 type

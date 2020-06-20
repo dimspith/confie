@@ -1,3 +1,5 @@
+## Parsers for the configuration and configuration detection
+
 import parsecfg, tables, strutils, os
 import types
 
