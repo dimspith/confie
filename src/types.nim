@@ -1,4 +1,4 @@
-import sugar, sequtils, strutils, strformat
+import sequtils, strutils, colorize, sugar
 
 type
   Dotfile* = object
@@ -11,9 +11,16 @@ type
     dotfiles*: seq[Dotfile]
     packages*: seq[string]
 
-func getAllDotfileNames*(config: Conf): seq[string] =
-  ## Returns a list of all dotfile names defined in the configuration
-  return config.dotfiles.map(x => x.name)
+func getPPDotfile*(dotfile: Dotfile, maxNameLen: int): string =
+  ## Returns dotfile info in a pretty-printed format
+  result.add(dotfile.name.fgCyan)
+  for i in 0..(maxNameLen - dotfile.name.len):
+    result.add(" ")
+  result.add(": [" & dotfile.local_path & " -> " & dotfile.install_path & " ]\n")
+
+func getMaxDotName*(dotfiles: seq[Dotfile]): int =
+  ## Returns the length of the largest dotfile name
+  return max(dotfiles.map((a) => a.name.len))
 
 func stringsToSeq*(packages: string): seq[string] =
   ## Converts a multiline string into a sequence
@@ -34,10 +41,11 @@ func getPackagesString*(conf: Conf): string =
   conf.packages.foldl(a & " " & b)
 
 proc printConfig*(conf: Conf): string =
-  return &"""
-Package list:
-{getPackagesString conf}
+  ## Pretty print config
 
-Dotfiles:
-{getAllDotfileNames(conf).foldl(a & " " & b)}
-"""
+  let maxDotName: int = getMaxDotName(conf.dotfiles);
+
+  result.add("Package List:\n".fgYellow.bold)
+  result.add((getPackagesString conf) & "\n\n")
+  result.add("Dotfiles:\n".fgMagenta.bold)
+  result.add(conf.dotfiles.map((a) => getPPDotfile(a, maxDotName)).join())
