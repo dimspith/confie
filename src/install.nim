@@ -1,4 +1,4 @@
-import osproc, distros, types, sync, sugar, sequtils, strutils
+import osproc, distros, types, sync, sugar, sequtils, strutils, colorize
 
 proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
@@ -10,17 +10,17 @@ proc installPackages*(config: Conf): string =
   ## Install all packages defined in the configuration with the
   ## system's package manager
   if (getPackagesString(config).isEmptyOrWhitespace()):
-    return "Packages section is empty or not declared correctly"
+    return "Error: ".fgRed & "Packages section is empty or not declared correctly."
   let (installCmd, root) =
     foreignDepInstallCmd(getPackagesString(config))
   let cmd = getNeeded(installCmd)
   if root == true:
     if (execCmd("sudo " & cmd) == 1):
-      return "Installation failed"
+      return "Error: ".fgRed & "Installation failed."
   else:
     if (execCmd(cmd) == 1):
-      return "Installation failed"
-  return "Packages installed"
+      return "Error: ".fgRed & "Installation failed."
+  return "Success: ".fgGreen & "Packages installed successfully."
 
 proc verify(message: string): bool =
   while true:
@@ -33,16 +33,16 @@ proc verify(message: string): bool =
 
 proc installDotfiles*(config: Conf): string =
   ## Install all dotfiles defined in the configuration
-  if verify("Proceed copying dotfiles? (y/n)") == false:
-    return "Abort"
+  if verify("Prompt: ".fgYellow & "Proceed copying dotfiles? (y/n)") == false:
+    return "Error: ".fgRed & "Aborted."
   else:
     discard config.dotfiles.map(dot => copyDots(dot.local_path, dot.install_path))
-    return "Dotfiles copied"
+    return "Success: ".fgGreen & "Dotfiles copied."
 
 proc fetchDotfiles*(config: Conf): string =
   ## Fetches all dotfiles defined in the configuration
-  if verify("Proceed fetching dotfiles? (y/n)") == false:
-    return "Abort"
+  if verify("Prompt: " & "Proceed fetching dotfiles? (y/n)") == false:
+    return "Error: ".fgRed & "Aborted."
   else:
     discard config.dotfiles.map(dot => copyDots(dot.install_path, dot.local_path))
-    return "Dotfiles copied"
+    return "Success: ".fgGreen & "Dotfiles copied."

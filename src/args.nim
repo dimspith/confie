@@ -1,10 +1,7 @@
 ## This module contains all functions responsible for parsing and validating
 ## command line arguments
 
-import os, strutils
-import parser
-import install
-import types
+import os, strutils, parser, install, types, colorize
 
 
 let helpMessage: string = """
@@ -48,12 +45,12 @@ proc parseArgs*(argList: seq[TaintedString]): string =
               of "packages":
                 echo installPackages(parsedConfig[1])
               else:
-                quit("Error: Unsupported installation candidate", QuitFailure)
+                quit("Error:".fgRed & " Unsupported installation candidate.", QuitFailure)
       elif argList.contains("fetch"):
         echo fetchDotfiles(parsedConfig[1])
       elif argList.contains("print-config"):
         echo printConfig(parsedConfig[1])
       else:
-        quit("Command not found", QuitFailure)
+        quit("Error: ".fgRed &  "Command not found.", QuitFailure)
     else:
       quit(parsedConfig[0], QuitFailure)

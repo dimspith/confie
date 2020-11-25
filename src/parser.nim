@@ -1,4 +1,4 @@
-import parsecfg, tables, strutils, os
+import parsecfg, tables, strutils, os, colorize
 import types
 
 func parseConfig*(cfg: Config): Conf =
@@ -28,6 +28,6 @@ proc parseFileOrDir*(location: string): tuple[error: string, config: Conf] =
       let config = parseConfig(loadConfig(location / "confie.cfg"))
       return ("", config)
     else:
-      return ("Directory does not contain a confie.cfg file!", Conf())
+      return ("Error: ".fgRed & "Directory does not contain a confie.cfg file.", Conf())
   else:
-    return ("Invalid file or directory!", Conf())
+    return ("Error: ".fgRed & "Invalid file or directory.", Conf())
