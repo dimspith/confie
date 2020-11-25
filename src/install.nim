@@ -22,18 +22,18 @@ proc installPackages*(config: Conf): string =
       return "Installation failed"
   return "Packages installed"
 
-proc verify(): string =
+proc verify(message: string): bool =
   while true:
-    echo("Proceed with copy?(y/n)")
+    echo(message)
     let answer = stdin.readLine()
     if answer == "y" or answer == "yes" or answer == "Y":
-      return "Continue"
+      return true
     elif answer == "n" or answer == "no" or answer == "N":
-      return "Abort"
+      return false
 
 proc installDotfiles*(config: Conf): string =
   ## Install all dotfiles defined in the configuration
-  if verify() == "Abort":
+  if verify("Proceed copying dotfiles? (y/n)") == false:
     return "Abort"
   else:
     discard config.dotfiles.map(dot => copyDots(dot.local_path, dot.install_path))
@@ -41,7 +41,7 @@ proc installDotfiles*(config: Conf): string =
 
 proc fetchDotfiles*(config: Conf): string =
   ## Fetches all dotfiles defined in the configuration
-  if verify() == "Abort":
+  if verify("Proceed fetching dotfiles? (y/n)") == false:
     return "Abort"
   else:
     discard config.dotfiles.map(dot => copyDots(dot.install_path, dot.local_path))
