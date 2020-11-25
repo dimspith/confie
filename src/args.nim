@@ -45,7 +45,7 @@ proc parseArgs*(argList: seq[TaintedString]): string =
               of "packages":
                 echo installPackages(parsedConfig[1])
               else:
-                quit("Error:".fgRed & " Unsupported installation candidate.", QuitFailure)
+                quit("Error: ".fgRed & " Unsupported installation candidate.", QuitFailure)
       elif argList.contains("fetch"):
         echo fetchDotfiles(parsedConfig[1])
       elif argList.contains("print-config"):

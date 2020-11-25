@@ -41,7 +41,7 @@ proc installDotfiles*(config: Conf): string =
 
 proc fetchDotfiles*(config: Conf): string =
   ## Fetches all dotfiles defined in the configuration
-  if verify("Prompt: " & "Proceed fetching dotfiles? (y/n)") == false:
+  if verify("Prompt: ".fgYellow & "Proceed fetching dotfiles? (y/n)") == false:
     return "Error: ".fgRed & "Aborted."
   else:
     discard config.dotfiles.map(dot => copyDots(dot.install_path, dot.local_path))
