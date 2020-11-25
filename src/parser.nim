@@ -20,11 +20,11 @@ proc parseFileOrDir*(location: string): tuple[error: string, config: Conf] =
   ## check if it's contained inside. Returns a tuple containing an error string
   ## and the parsed configuration if no error was encountered
 
-  if existsFile location:
+  if fileExists location:
     let config = parseConfig(loadConfig(location))
     return ("", config)
-  elif existsDir location:
-    if existsFile (location / "confie.cfg"):
+  elif dirExists location:
+    if fileExists (location / "confie.cfg"):
       let config = parseConfig(loadConfig(location / "confie.cfg"))
       return ("", config)
     else:
