@@ -7,8 +7,6 @@ license       = "MIT"
 srcDir        = "src"
 bin           = @["confie"]
 
-
-
 # Dependencies
 
 requires "nim >= 1.2.0"

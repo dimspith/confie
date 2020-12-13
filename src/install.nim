@@ -4,7 +4,7 @@ proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
     return package & " --needed"
   else:
-    return package
+    return ""
 
 proc installPackages*(config: Conf): string =
   ## Install all packages defined in the configuration with the
@@ -14,6 +14,7 @@ proc installPackages*(config: Conf): string =
   let (installCmd, root) =
     foreignDepInstallCmd(getPackagesString(config))
   let cmd = getNeeded(installCmd)
+  if cmd.isEmptyOrWhitespace(): return "Error: ".fgRed & "Unsupported distro, aborting..."
   if root == true:
     if (execCmd("sudo " & cmd) == 1):
       return "Error: ".fgRed & "Installation failed."
@@ -24,7 +25,7 @@ proc installPackages*(config: Conf): string =
 
 proc verify(message: string): bool =
   while true:
-    echo(message)
+    stdout.write(message)
     let answer = stdin.readLine()
     if answer == "y" or answer == "yes" or answer == "Y":
       return true
@@ -33,7 +34,7 @@ proc verify(message: string): bool =
 
 proc installDotfiles*(config: Conf): string =
   ## Install all dotfiles defined in the configuration
-  if verify("Prompt: ".fgYellow & "Proceed copying dotfiles? (y/n)") == false:
+  if verify("Prompt: ".fgYellow & "Proceed copying dotfiles? (y/n) ") == false:
     return "Error: ".fgRed & "Aborted."
   else:
     discard config.dotfiles.map(dot => copyDots(dot.local_path, dot.install_path))

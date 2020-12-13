@@ -1,4 +1,4 @@
-import os, strutils
+import os, strutils, colorize
 
 proc getPath(path: string): string =
   if path.startsWith("~"):
@@ -8,19 +8,19 @@ proc getPath(path: string): string =
 
 proc overwriteDot(source, dest, oldSource, oldDest: string, ftype: int) =
   while true:
-    echo("Do you want to overwrite already existing file/directory?(y/n)")
+    stdout.write("Prompt: ".fgYellow, "Overwrite ", oldDest.fgMagenta, " with ", oldSource.fgMagenta, " (y/n) ")
     let answer = stdin.readLine()
     if answer == "y" or answer == "yes" or answer == "Y":
-      echo("Copying ", oldSource, " to ", oldDest)
+      echo("Info: ".fgCyan, "Copying ", oldSource, " to ", oldDest)
       if ftype == 0:
         copyDir(source, dest)
       elif ftype == 1:
         copyFile(source, dest)
       else:
-        echo("Not a file or directory.")
+        echo("Error: ".fgRed, "Not a file or directory.")
       return
     elif answer == "n" or answer == "no" or answer == "N":
-      echo("Skipping ", oldSource)
+      echo("Info: ".fgCyan ,"Skipping ", oldSource)
       return
 
 func addTail(source, dest: string): string =
@@ -34,21 +34,22 @@ func addTail(source, dest: string): string =
 proc copyDots*(source, dest: string): string =
   if source.isEmptyOrWhitespace or dest.isEmptyOrWhitespace:
     return "Skip"
-  let oldSource = source
-  let oldDest = dest
-  let source = getPath(source)
+  let
+    oldSource = source
+    oldDest = dest
+    source = getPath(source)
   var dest = getPath(dest)
   dest = addTail(source, dest)
   if dirExists(source) and dirExists(dest):
     overwriteDot(source, dest, oldSource, oldDest, 0)
   elif dirExists(source) and not dirExists(dest):
-    echo("Copying ", oldSource, " to ", oldDest)
+    echo("Info: ".fgCyan, "Copying ", oldSource, " to ", oldDest)
     copyDir(source, dest)
   elif fileExists(source) and not fileExists(dest):
-    echo("Copying ", oldSource, " to ", oldDest)
+    echo("Info: ".fgCyan, "Copying ", oldSource, " to ", oldDest)
     copyFile(source, dest)
   elif fileExists(source) and fileExists(dest):
     overwriteDot(source, dest, oldSource, oldDest, 1)
   else:
-    echo "Directory or file does not exist."
+    echo "Error: ".fgRed, "Directory or file does not exist."
   return "Done"
