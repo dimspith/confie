@@ -1,13 +1,17 @@
-import args
-import os
+import args, os
 
 const cmdArgsError*: string = "Error: Could not get command line arguments!"
 ## Error thrown when confie can't fetch the command line arguments
 
+proc exitProc() {.noconv.} =
+  quit(0)
+
+setControlCHook(exitProc)
+
 proc main() =
   when declared(commandLineParams):
     let arglist = commandLineParams()
-    discard parseArgs(arglist)
+    parseArgs(arglist)
   else:
     quit(cmdArgsError)
 
