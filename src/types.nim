@@ -40,12 +40,18 @@ func getPackagesString*(conf: Conf): string =
   ## Fetches the package list from the configuration as one string
   conf.packages.foldl(a & " " & b)
 
+proc printPackages*(conf: Conf): string =
+  result.add("Package List:\n".fgYellow.bold)
+  result.add((getPackagesString conf) & "\n")
+
+proc printDotfiles*(conf: Conf): string =
+  let maxDotName: int = getMaxDotName(conf.dotfiles);
+  result.add("Dotfiles:\n".fgMagenta.bold)
+  result.add(conf.dotfiles.map((a) => getPPDotfile(a, maxDotName)).join())
+
 proc printConfig*(conf: Conf): string =
   ## Pretty print config
 
-  let maxDotName: int = getMaxDotName(conf.dotfiles);
+  echo printPackages(conf)
+  echo printDotfiles(conf)
 
-  result.add("Package List:\n".fgYellow.bold)
-  result.add((getPackagesString conf) & "\n\n")
-  result.add("Dotfiles:\n".fgMagenta.bold)
-  result.add(conf.dotfiles.map((a) => getPPDotfile(a, maxDotName)).join())

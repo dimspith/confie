@@ -1,5 +1,14 @@
 import osproc, distros, types, sync, sugar, sequtils, strutils, colorize
 
+proc verify(message: string): bool =
+  while true:
+    stdout.write(message)
+    let answer = stdin.readLine()
+    if answer == "y" or answer == "yes" or answer == "Y":
+      return true
+    elif answer == "n" or answer == "no" or answer == "N":
+      return false
+
 proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
     return package & " --needed"
@@ -9,8 +18,10 @@ proc getNeeded(package: string): string =
 proc installPackages*(config: Conf): string =
   ## Install all packages defined in the configuration with the
   ## system's package manager
+  
   if (getPackagesString(config).isEmptyOrWhitespace()):
     return "Error: ".fgRed & "Packages section is empty or not declared correctly."
+
   let (installCmd, root) =
     foreignDepInstallCmd(getPackagesString(config))
   let cmd = getNeeded(installCmd)
@@ -23,17 +34,9 @@ proc installPackages*(config: Conf): string =
       return "Error: ".fgRed & "Installation failed."
   return "Success: ".fgGreen & "Packages installed successfully."
 
-proc verify(message: string): bool =
-  while true:
-    stdout.write(message)
-    let answer = stdin.readLine()
-    if answer == "y" or answer == "yes" or answer == "Y":
-      return true
-    elif answer == "n" or answer == "no" or answer == "N":
-      return false
-
 proc installDotfiles*(config: Conf): string =
   ## Install all dotfiles defined in the configuration
+  echo printDotfiles(config)
   if verify("Prompt: ".fgYellow & "Proceed copying dotfiles? (y/n) ") == false:
     return "Error: ".fgRed & "Aborted."
   else:
