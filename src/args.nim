@@ -75,34 +75,3 @@ proc parseArgs*(argList: seq[TaintedString]) =
       echo printConfig(parsedConfig[1])
     else:
       quit("Error: ".fgRed &  "Command '" & arguments[0] & "' not found.", QuitFailure)
-
-  # if paramCount() == 0:
-  #   quit(helpMessage, QuitSuccess)
-  # elif argList.contains("-h"):
-  #   quit(helpMessage, QuitSuccess)
-  # else:
-  #   let parsedConfig = parseFileOrDir(getCurrentDir())
-  #   if parsedConfig[0].isEmptyOrWhitespace:
-  #     if argList.contains("install"):
-  #       let nextLoc: int = (argList.find("install") + 1)
-  #       if argList.len == nextLoc or argList[nextLoc].starftsWith("-"):
-  #           echo installPackages(parsedConfig[1])
-  #           echo installDotfiles(parsedConfig[1])
-  #       else:
-  #         if parsedConfig[0].isEmptyOrWhitespace:
-  #           case argList[nextLoc]:
-  #             of "dotfiles":
-  #               echo installDotfiles(parsedConfig[1])
-  #             of "packages":
-  #               echo installPackages(parsedConfig[1])
-  #             else:
-  #               quit("Error: ".fgRed & " Unsupported installation candidate.", QuitFailure)
-  #     elif argList.contains("fetch"):
-  #       echo fetchDotfiles(parsedConfig[1])
-  #     elif argList.contains("print-config"):
-  #       echo printConfig(parsedConfig[1])
-  #     else:
-  #       quit("Error: ".fgRed &  "Command not found.", QuitFailure)
-  #   else:
-  #     quit(parsedConfig[0], QuitFailure)
-
