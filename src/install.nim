@@ -4,10 +4,11 @@ proc verify(message: string): bool =
   while true:
     stdout.write(message)
     let answer = stdin.readLine()
-    if answer == "y" or answer == "yes" or answer == "Y":
-      return true
-    elif answer == "n" or answer == "no" or answer == "N":
-      return false
+    case answer:
+      of "y", "yes", "Y":
+        return true
+      else:
+        return false
 
 proc getNeeded(package: string): string =
   if detectOs(Manjaro) or detectOs(ArchLinux):
@@ -18,13 +19,14 @@ proc getNeeded(package: string): string =
 proc installPackages*(config: Conf): string =
   ## Install all packages defined in the configuration with the
   ## system's package manager
-  
+
   if (getPackagesString(config).isEmptyOrWhitespace()):
     return "Error: ".fgRed & "Packages section is empty or not declared correctly."
 
-  let (installCmd, root) =
-    foreignDepInstallCmd(getPackagesString(config))
-  let cmd = getNeeded(installCmd)
+  let
+      (installCmd, root) = foreignDepInstallCmd(getPackagesString(config))
+      cmd = getNeeded(installCmd)
+
   if cmd.isEmptyOrWhitespace(): return "Error: ".fgRed & "Unsupported distro, aborting..."
   if root == true:
     if (execCmd("sudo " & cmd) == 1):
