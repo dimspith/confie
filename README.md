@@ -1,9 +1,6 @@
-<div style="text-align:center" markdown="1">
-  <img
-      width="500"
-      src="https://gitlab.com/langhops/confie/-/raw/develop/confie.png"
-      alt="Confie - configuration manager">
-</div>
+<img width="256"
+     src="./confie.png"
+     alt="Confie - configuration manager">
 
 #### The fast and portable configuration manager for GNU/Linux systems.
 
