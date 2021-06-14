@@ -59,18 +59,18 @@ proc parseArgs*(argList: seq[TaintedString]) =
   case arguments[0]:
     of "install":
       if arguments.len == 1:
-        echo installPackages(parsedConfig[1])
-        echo installDotfiles(parsedConfig[1])
+        parsedConfig[1].installPackages()
+        parsedConfig[1].installDotfiles(false)
       else:
         case arguments[1]:
           of "dotfiles":
-            echo installDotfiles(parsedConfig[1])
+            parsedConfig[1].installDotfiles(false)
           of "packages":
-            echo installPackages(parsedConfig[1])
+            parsedConfig[1].installPackages()
           else:
             quit("Error: ".fgRed &  "Unknown argument '" & arguments[0] & "'", QuitFailure)
     of "fetch":
-      echo fetchDotfiles(parsedConfig[1])
+      parsedConfig[1].installDotfiles(true)
     of "print-config":
       echo printConfig(parsedConfig[1])
     else:
